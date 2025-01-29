@@ -1,0 +1,53 @@
+jwt:
+    refreshable-duration: ${JWT_REFRESHABLE_DURATION}
+    signerKey: ${JWT_SIGNER_KEY}
+    valid-duration: ${JWT_VALID_DURATION}
+
+spring:
+    application:
+        name: ${SPRING_APPLICATION_NAME}
+    datasource:
+        driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
+        password: ${SPRING_DATASOURCE_PASSWORD}
+        url: ${SPRING_DATASOURCE_URL}
+        username: ${SPRING_DATASOURCE_USERNAME}
+    jpa:
+        database: ${SPRING_JPA_DATABASE}
+        database-platform: ${SPRING_JPA_DATABASE_PLATFORM}
+        hibernate:
+            ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+        properties:
+            jakarta.persistence.lock.timeout: 5000
+            hibernate:
+                format_sql: ${SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL}
+    mail:
+        from: ${SPRING_MAIL_FROM}
+        host: ${SPRING_MAIL_HOST}
+        password: ${SPRING_MAIL_PASSWORD}
+        port: ${SPRING_MAIL_PORT}
+        properties:
+            mail:
+                smtp:
+                    auth: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH}
+                    starttls:
+                        enable: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE}
+        username: ${SPRING_MAIL_USERNAME}
+    servlet:
+        multipart:
+            max-file-size: ${SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE}
+            max-request-size: ${SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE}
+
+payment:
+    vnPay:
+        url: ${PAYMENT_VNPAY_URL}
+        tmnCode: ${PAYMENT_VNPAY_TMN_CODE}
+        secretKey: ${PAYMENT_VNPAY_SECRET_KEY}
+        returnUrl: ${PAYMENT_VNPAY_RETURN_URL}
+        version: ${PAYMENT_VNPAY_VERSION}
+        command: ${PAYMENT_VNPAY_COMMAND}
+        orderType: ${PAYMENT_VNPAY_ORDER_TYPE}
+
+cloudinary:
+    cloud_name: ${CLOUD_NAME}
+    api_key: ${API_KEY}
+    api_secret: ${API_SECRET}
