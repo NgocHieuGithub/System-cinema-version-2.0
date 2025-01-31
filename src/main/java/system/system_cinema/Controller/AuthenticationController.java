@@ -48,19 +48,19 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/refresh-token")
-    public ApiResponse<TokenResponse> refreshToken(@RequestBody OneFieldRequest oneFieldRequest) {
-        try {
-            return ApiResponse.<TokenResponse>builder()
-                    .message("Successful")
-                    .data(authenticateServiceImp.refreshToken(oneFieldRequest.getInput()))
-                    .build();
-        } catch (Exception e){
-            return ApiResponse.<TokenResponse>builder()
-                    .error(e.getMessage())
-                    .build();
-        }
-    }
+//    @PostMapping("/refresh-token")
+//    public ApiResponse<TokenResponse> refreshToken(@RequestBody OneFieldRequest oneFieldRequest) {
+//        try {
+//            return ApiResponse.<TokenResponse>builder()
+//                    .message("Successful")
+//                    .data(authenticateServiceImp.refreshToken(oneFieldRequest.getInput()))
+//                    .build();
+//        } catch (Exception e){
+//            return ApiResponse.<TokenResponse>builder()
+//                    .error(e.getMessage())
+//                    .build();
+//        }
+//    }
     @PostMapping("forgot-password")
     public ApiResponse<OTP_Response> forgotPassword(@RequestBody VerifyRequest request) {
         try {

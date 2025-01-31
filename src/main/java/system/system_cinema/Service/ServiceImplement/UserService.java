@@ -1,5 +1,6 @@
 package system.system_cinema.Service.ServiceImplement;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,14 +23,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserService implements IUserService {
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    UserRepository userRepository;
+    UserMapper userMapper;
     PasswordEncoder getPasswordEncoder;
 
+    // Xem thong tin chi tiet user
     @Override
-    public UserResponse GetUserDetails() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByName(username);
+    public User GetUserDetails(int id) {
+        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException(""));
     }
 
     @Override
@@ -46,16 +47,21 @@ public class UserService implements IUserService {
         }
         userRepository.save(userMapper.update(editUserRequest, user));
     }
+
     @Override
     public void UpdatePassword(EditUserRequest editUserRequest) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findById(editUserRequest.getId()).orElseThrow(()->new RuntimeException("Not found user"));
+        if (!user.getUsername().equals(username)) {
+            throw new RuntimeException("Jwt not match information user");
+        }
         user.setPassword(getPasswordEncoder.encode(editUserRequest.getPassword()));
         userRepository.save(user);
     }
 
     @Override
-    public void ActivateUser(int inFor) {
-        User user = userRepository.findById(inFor).orElseThrow(()->new RuntimeException("Not found user"));
+    public void ActivateUser(int id) {
+        User user = userRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Not found user"));
         user.setStatus(user.getStatus().equals(Status.ACTIVE) ? Status.INACTIVE : Status.ACTIVE);
         userRepository.save(user);
     }

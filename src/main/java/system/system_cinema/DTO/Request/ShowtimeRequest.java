@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ShowtimeRequest {
-    int movieId;  // ID của phim
-    LocalDateTime startTime;  // Giờ bắt đầu chiếu
-    LocalDateTime endTime;    // Giờ kết thúc chiếu
+    int movieId;
+    LocalDateTime startTime;
+    LocalDateTime endTime;
 }
 

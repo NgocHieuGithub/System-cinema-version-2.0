@@ -35,12 +35,12 @@ public class MovieController {
         }
     }
 
-    @GetMapping("/get/{id}")
-    public ApiResponse<MovieResponse> getMovieById(@PathVariable int id) {
+    @GetMapping("/get")
+    public ApiResponse<MovieResponse> getMovieById(@RequestParam int id) {
         try {
             return ApiResponse.<MovieResponse>builder()
                     .message("Successful")
-                    .data(movieService.getMovieWithAverageRating(id))
+                    .data(movieService.getMovieById(id))
                     .build();
         } catch (Exception e) {
             return ApiResponse.<MovieResponse>builder()
@@ -49,19 +49,6 @@ public class MovieController {
         }
     }
 
-    @GetMapping("/get-average-rating/{id}")
-    public ApiResponse<MovieResponse> getMovieWithAverageRating(@PathVariable int id) {
-        try {
-            return ApiResponse.<MovieResponse>builder()
-                    .message("Successful")
-                    .data(movieService.getMovieWithAverageRating(id))
-                    .build();
-        } catch (Exception e) {
-            return ApiResponse.<MovieResponse>builder()
-                    .error(e.getMessage())
-                    .build();
-        }
-    }
     @PostMapping("/create")
     public ApiResponse<MovieResponse> createMovie(@RequestPart MovieRequest movieRequest, @RequestPart MultipartFile file) {
         try {

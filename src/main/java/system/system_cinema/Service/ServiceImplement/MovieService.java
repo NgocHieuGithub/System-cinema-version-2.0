@@ -1,6 +1,8 @@
 package system.system_cinema.Service.ServiceImplement;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import system.system_cinema.DTO.Request.MovieRequest;
@@ -18,26 +20,17 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class MovieService implements IMovieService {
 
-    private final MovieRepository movieRepository;
-    private final MovieMapper movieMapper;
-    private final FileUpload fileUploadImpl;
+    MovieRepository movieRepository;
+    MovieMapper movieMapper;
+    FileUpload fileUploadImpl;
 
     @Override
     public List<MovieResponse> getAllMovies() {
         return movieRepository.findAll().stream()
-                .map(movie -> {
-                    double averageRating = movie.getComments().stream()
-                            .filter(comment -> comment.getParentComment() == null)
-                            .mapToInt(Comment::getRate)
-                            .average()
-                            .orElse(0.0);
-
-                    MovieResponse movieResponse = movieMapper.toMovieResponse(movie);
-                    movieResponse.setAverageRating(averageRating); // Thiết lập averageRating
-                    return movieResponse;
-                })
+                .map(movieMapper::toMovieResponse)
                 .collect(Collectors.toList());
     }
 
@@ -63,13 +56,15 @@ public class MovieService implements IMovieService {
     public void updateMovie(int id, MovieRequest movieRequest, MultipartFile movieImage) throws IOException {
         Movie movie = movieRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Movie not found"));
-
-        movie.setTitle(movieRequest.getTitle());
-        movie.setDescription(movieRequest.getDescription());
-        movie.setDirector(movieRequest.getDirector());
-        movie.setReleaseDate(movieRequest.getReleaseDate());
-        movie.setActors(movieRequest.getActor());
-        movie.setDuration(movieRequest.getDuration());
+        if (movie.getStatus() != Status.ACTIVE) {
+            throw new RuntimeException("Movie is not active");
+        }
+        if (movieRequest.getTitle() != null) movie.setTitle(movieRequest.getTitle());
+        if (movieRequest.getDescription() != null) movie.setDescription(movieRequest.getDescription());
+        if (movieRequest.getDirector() != null) movie.setDirector(movieRequest.getDirector());
+        if (movieRequest.getReleaseDate() != null) movie.setReleaseDate(movieRequest.getReleaseDate());
+        if (movieRequest.getActor() != null ) movie.setActors(movieRequest.getActor());
+        if (movieRequest.getDuration() != 0) movie.setDuration(movieRequest.getDuration());
         if (movieImage != null && !movieImage.isEmpty()) {
             movie.setImage(fileUploadImpl.upDateFile(movieImage, movie.getPublic_id()));
         }
@@ -86,22 +81,5 @@ public class MovieService implements IMovieService {
     @Override
     public List<MovieResponse> searchMovie(String keyWords) {
         return movieRepository.findByTitleContainingIgnoreCase(keyWords).stream().map(movieMapper::toMovieResponse).collect(Collectors.toList());
-    }
-
-    @Override
-    public MovieResponse getMovieWithAverageRating(int id) {
-        Movie movie = movieRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Movie not found"));
-
-        // Tính toán trung bình đánh giá dựa trên các bình luận
-        double averageRating = movie.getComments().stream()
-                .filter(comment -> comment.getParentComment() == null) // Only root comments
-                .mapToInt(Comment::getRate)
-                .average()
-                .orElse(0.0);
-
-        MovieResponse movieResponse = movieMapper.toMovieResponse(movie);
-        movieResponse.setAverageRating(averageRating);  // Cập nhật điểm đánh giá trung bình vào MovieResponse
-        return movieResponse;
     }
 }

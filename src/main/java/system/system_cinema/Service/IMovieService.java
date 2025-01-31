@@ -14,5 +14,4 @@ public interface IMovieService {
     void updateMovie(int id, MovieRequest movieRequest, MultipartFile movieImage) throws IOException;
     void deleteMovie(int id);
     List<MovieResponse> searchMovie(String keyWords);
-    MovieResponse getMovieWithAverageRating(int id);
 }

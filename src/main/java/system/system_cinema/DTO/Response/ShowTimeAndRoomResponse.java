@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class ShowTimeAndRoomResponse {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     String movie;
-    String id;
+    int id, roomId;
     LocalDateTime dateCreate,startTime, endTime;
-    String roomId, nameRoom;
+    String nameRoom;
 }

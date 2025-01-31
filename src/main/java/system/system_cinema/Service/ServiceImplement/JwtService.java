@@ -32,50 +32,14 @@ public class JwtService implements IJwtService {
     @Value("${jwt.signerKey}")
     protected String SIGNER_KEY;
 
-    @NonFinal
-    @Value("${jwt.valid-duration}")
-    protected long VALID_DURATION;
-
-    @NonFinal
-    @Value("${jwt.refreshable-duration}")
-    protected long REFRESHABLE_DURATION;
-    @Override
-    public String generateAccessToken(Map<String, Object> claims, String username) {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(SIGNER_KEY.getBytes(), SignatureAlgorithm.HS256.getJcaName());
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(username)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(
-                        Instant.now().plus(VALID_DURATION, ChronoUnit.SECONDS).toEpochMilli()
-                ))
-                .signWith(secretKeySpec, SignatureAlgorithm.HS256)
-                .compact();
-    }
-
-    @Override
-    public String generateRefreshToken(String username) {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(SIGNER_KEY.getBytes(), SignatureAlgorithm.HS256.getJcaName());
-        return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(
-                        Instant.now().plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS).toEpochMilli()
-                ))
-                .signWith(secretKeySpec, SignatureAlgorithm.HS256)
-                .compact();
-    }
-
-
-
     @Override
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
     @Override
-    public String GenerateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(UserDetails userDetails, long time) {
+        return generateToken(new HashMap<>(), userDetails, time);
     }
 
     @Override
@@ -84,15 +48,14 @@ public class JwtService implements IJwtService {
         return (userName.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-    private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+    private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails, long time) {
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .setExpiration(new Date(System.currentTimeMillis() + time))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256).compact();
     }
-
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SIGNER_KEY);
         return Keys.hmacShaKeyFor(keyBytes);

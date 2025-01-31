@@ -9,7 +9,7 @@ import java.util.List;
 public interface IRoomService {
     RoomResponse getCinemaHallById(int id);
     List<RoomResponse> getAllCinemaHalls();
-    RoomResponse changeCinemaHallStatus(int id, boolean isActive);
+    RoomResponse changeCinemaHallStatus(int id);
     RoomResponse addShowtime(int cinemaHallId, ShowtimeRequest showtimeRequest);
     List<RoomResponse> checkAvailability(LocalDateTime time);
 }

@@ -2,9 +2,12 @@ package system.system_cinema.Service.ServiceImplement;
 
 import io.jsonwebtoken.Claims;
 import jakarta.mail.*;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,7 +26,6 @@ import system.system_cinema.Service.IAuthenticateService;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
-import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -34,23 +36,31 @@ public class AuthenticateServiceImp implements IAuthenticateService {
     JwtService jwtService;
     PasswordEncoder getPasswordEncoder;
     MailService mailService;
+    @NonFinal
+    @Value("${jwt.valid-duration}")
+    protected long VALID_DURATION;
 
+    @NonFinal
+    @Value("${jwt.refreshable-duration}")
+    protected long REFRESHABLE_DURATION;
+
+    // Sign in
     @Override
     public TokenResponse authenticate(LoginRequest loginRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        var user = userRepository.findAccount(loginRequest.getUsername())
+        var user = userRepository.findByUsername(loginRequest.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException(loginRequest.getUsername() + " not found"));
         if (user.getStatus().equals(Status.INACTIVE)){
             throw new UsernameNotFoundException("Account has not been activated");
         }
         return TokenResponse
                 .builder()
-                .access_token(jwtService.generateAccessToken(getClaims(user), user.getUsername()))
-                .refresh_token(jwtService.generateRefreshToken(user.getUsername()))
+                .access_token(jwtService.generateToken(user, VALID_DURATION))
+                .refresh_token(jwtService.generateToken(user, REFRESHABLE_DURATION))
                 .build();
     }
 
-
+    // Sign up
     @Override
     public TokenResponse signUp(SignUpRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername()) || userRepository.existsByEmail(signUpRequest.getEmail())) {
@@ -61,31 +71,33 @@ public class AuthenticateServiceImp implements IAuthenticateService {
                 .username(signUpRequest.getUsername())
                 .password(getPasswordEncoder.encode(signUpRequest.getPassword()))
                 .email(signUpRequest.getEmail())
-                .dateCreate(LocalDateTime.now())
                 .status(Status.ACTIVE)
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
         return TokenResponse
                 .builder()
-                .access_token(jwtService.generateAccessToken(getClaims(user), user.getUsername()))
-                .refresh_token(jwtService.generateRefreshToken(user.getUsername()))
+                .access_token(jwtService.generateToken(user, VALID_DURATION))
+                .refresh_token(jwtService.generateToken(user, REFRESHABLE_DURATION))
                 .build();
     }
 
+    // Refresh token
     @Override
     public TokenResponse refreshToken(String refreshToken) {
-        Date expiration = jwtService.extractClaim(refreshToken, Claims::getExpiration);
-        if (expiration == null || expiration.before(new Date(System.currentTimeMillis()))) {
-            throw new RuntimeException("Refresh token expired");
+        String username = jwtService.extractUserName(refreshToken);
+        User user = userRepository.findByUsername(username).orElseThrow(()-> new EntityNotFoundException("User not found"));
+        if (user.getStatus().equals(Status.ACTIVE)) {
+            return TokenResponse
+                    .builder()
+                    .access_token(jwtService.generateToken(user, VALID_DURATION))
+                    .refresh_token(jwtService.generateToken(user, REFRESHABLE_DURATION))
+                    .build();
+        } else {
+           throw new RuntimeException("Invalid refresh token");
         }
-        String username = jwtService.extractClaim(refreshToken, Claims::getSubject);
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
-        return TokenResponse
-                .builder()
-                .access_token(jwtService.generateAccessToken(getClaims(user), user.getUsername()))
-                .build();
     }
+
 
     @Override
     public OTP_Response createOTP(VerifyRequest verifyRequest) throws MessagingException, UnsupportedEncodingException {
@@ -99,9 +111,4 @@ public class AuthenticateServiceImp implements IAuthenticateService {
                 .build();
     }
 
-    private Map<String, Object> getClaims(User user) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("role", user.getRole());
-        return map;
-    }
 }

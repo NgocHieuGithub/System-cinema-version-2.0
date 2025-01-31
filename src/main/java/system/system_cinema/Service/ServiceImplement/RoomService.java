@@ -1,6 +1,8 @@
 package system.system_cinema.Service.ServiceImplement;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import system.system_cinema.DTO.Request.ShowtimeRequest;
 import system.system_cinema.DTO.Response.RoomResponse;
@@ -20,18 +22,19 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RoomService implements IRoomService {
 
 
-    private final ShowTimeRepository showtimeRepository;
-    private final MovieRepository movieRepository;
-    private final RoomMapper roomMapper;
-    private final RoomRepository roomRepository;
+    ShowTimeRepository showtimeRepository;
+    MovieRepository movieRepository;
+    RoomMapper roomMapper;
+    RoomRepository roomRepository;
 
     @Override
     public RoomResponse getCinemaHallById(int id) {
         Room room = roomRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cinema Hall not found"));
+                .orElseThrow(() -> new RuntimeException("Room not found"));
         return roomMapper.toCinemaHallResponse(room);
     }
 
@@ -43,7 +46,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public RoomResponse changeCinemaHallStatus(int id, boolean isActive) {
+    public RoomResponse changeCinemaHallStatus(int id) {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cinema Hall not found"));
         room.setStatus(room.getStatus().equals(Status.ACTIVE) ? Status.INACTIVE : Status.ACTIVE);
@@ -54,7 +57,7 @@ public class RoomService implements IRoomService {
     @Override
     public RoomResponse addShowtime(int roomId, ShowtimeRequest showtimeRequest) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new RuntimeException("Cinema Hall not found"));
+                .orElseThrow(() -> new RuntimeException("Room not found"));
 
         Movie movie = movieRepository.findById(showtimeRequest.getMovieId())
                 .orElseThrow(() -> new RuntimeException("Movie not found"));

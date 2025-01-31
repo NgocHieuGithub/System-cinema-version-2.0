@@ -19,10 +19,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "from User u where u.username = :value")
     UserResponse findByName(@Param("value") String name);
     @Query("select new system.system_cinema.DTO.Response.UserResponse(u.id, u.name, u.email, u.phone,u.username, u.avt, u.isActive)" +
-            "from User u join u.roles r where r.name = 'USER'")
+            "from User u")
     List<UserResponse> findUsers();
-    @Query("select u from User u where u.username = :value")
-    Optional<User> findAccount(String value);
 
     Optional<User> findByEmailAndUsername(String email, String username);
 

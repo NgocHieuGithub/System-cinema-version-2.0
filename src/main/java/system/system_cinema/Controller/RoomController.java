@@ -3,6 +3,7 @@ package system.system_cinema.Controller;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import system.system_cinema.DTO.Request.ShowtimeRequest;
 import system.system_cinema.DTO.ApiResponse;
@@ -13,8 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cinema-halls")
-@CrossOrigin("http://localhost:3000")
+@RequestMapping("/room")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RoomController {
@@ -35,7 +35,7 @@ public class RoomController {
     }
 
     @GetMapping("/get-all")
-    public ApiResponse<List<RoomResponse>> getAllCinemaHalls() {
+    public ApiResponse<List<RoomResponse>> getAllRoom() {
         try {
             return ApiResponse.<List<RoomResponse>>builder()
                     .message("Successful")
@@ -48,12 +48,13 @@ public class RoomController {
         }
     }
 
-    @PutMapping("/change-status/{id}")
-    public ApiResponse<RoomResponse> changeCinemaHallStatus(@PathVariable int id, @RequestParam boolean isActive) {
+    @PutMapping("/change")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ApiResponse<RoomResponse> ChangeRoomStatus(@RequestParam int id) {
         try {
             return ApiResponse.<RoomResponse>builder()
                     .message("Status changed successfully")
-                    .data(roomService.changeCinemaHallStatus(id, isActive))
+                    .data(roomService.changeCinemaHallStatus(id))
                     .build();
         } catch (Exception e) {
             return ApiResponse.<RoomResponse>builder()
@@ -63,6 +64,7 @@ public class RoomController {
     }
 
     @PostMapping("/add-showtime/{cinemaHallId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<RoomResponse> addShowtime(@PathVariable int cinemaHallId, @RequestBody ShowtimeRequest showtimeRequest) {
         try {
             return ApiResponse.<RoomResponse>builder()
@@ -75,7 +77,8 @@ public class RoomController {
                     .build();
         }
     }
-    @GetMapping("/check-avaiable-room")
+    @GetMapping("/check-available-room")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<List<RoomResponse>> checkAvailableRoom(@RequestParam LocalDateTime time ) {
         try {
             return ApiResponse.<List<RoomResponse>>builder()

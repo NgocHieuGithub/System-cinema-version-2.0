@@ -31,7 +31,19 @@ import system.system_cinema.Service.IUserService;
 @EnableMethodSecurity
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SecurityConfig {
-    String[] WHITE_LIST = {"/auth/**","/swagger-ui/**","/v3/**","/movies/**","/cinema-halls/**","showtimes/**","/comments/**", "/payment/**","/seats/**","/tickets/**","/combo/**","/snacks/**"};
+    String[] WHITE_LIST = {
+            "/auth/**",
+            "/swagger-ui/**","/v3/**",
+            "/movies/get-all", "/movies/get",
+            "/room/**",
+            "/showtimes/**",
+            "/comments/**",
+            "/payment/**",
+            "/seats/**",
+            "/tickets/**",
+            "/combo/**",
+            "/snacks/**"
+    };
     IUserService userService;
     Prefilter preFilter;
     PasswordEncoder passwordEncoder;

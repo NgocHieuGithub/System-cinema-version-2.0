@@ -13,13 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MovieRequest {
-    String title;
-    String genre;
-    String description;
-    int duration;
-    String actor;
-    String director;
+    String title, genre, description, actor, director;
     LocalDate releaseDate;
-    String image;
-    Status status;
+    int duration;
 }
