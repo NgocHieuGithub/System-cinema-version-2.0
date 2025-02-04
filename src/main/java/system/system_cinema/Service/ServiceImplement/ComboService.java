@@ -94,7 +94,7 @@ public class ComboService implements IComboService {
     }
 
     @Override
-    public void DeleteCombo(String comboId) {
+    public void DeleteCombo(int comboId) {
         Combo combo = comboRepository.findById(comboId).orElseThrow(() -> new RuntimeException("Combo not found"));
         combo.setStatus(combo.getStatus().equals(Status.ACTIVE) ? Status.INACTIVE : Status.ACTIVE);
         comboRepository.save(combo);

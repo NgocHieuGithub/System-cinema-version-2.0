@@ -1,6 +1,8 @@
 package system.system_cinema.Service.ServiceImplement;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,30 +32,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ShowTimeService implements IShowTimeService {
 
-    private final RoomRepository roomRepository;
-    private final MovieRepository movieRepository;
-    private final ShowTimeRepository showtimeRepository;
-    private final ShowtimeMapper showtimeMapper;
-    private final BookingRepository bookingRepository;
-
-    @Override
-    public ShowtimeResponse createShowtime(int cinemaHallId, ShowtimeRequest showtimeRequest) {
-        Room room = roomRepository.findById(cinemaHallId)
-                .orElseThrow(() -> new RuntimeException("Cinema Hall not found"));
-
-        Movie movie = movieRepository.findById(showtimeRequest.getMovieId())
-                .orElseThrow(() -> new RuntimeException("Movie not found"));
-
-        Showtime showtime = showtimeMapper.toShowtime(showtimeRequest, movie);
-        showtime.setRoom(room);
-
-        Showtime savedShowtime = showtimeRepository.save(showtime);
-
-        return showtimeMapper.toShowtimeResponse(savedShowtime);
-    }
-
+    RoomRepository roomRepository;
+    MovieRepository movieRepository;
+    ShowTimeRepository showtimeRepository;
+    ShowtimeMapper showtimeMapper;
+    BookingRepository bookingRepository;
     @Override
     public void createShowTime(ShowTimeRequestCreate requestCreate) {
         if (requestCreate.getMovieId() != 0

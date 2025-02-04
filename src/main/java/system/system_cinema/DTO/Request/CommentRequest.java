@@ -9,9 +9,9 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentRequest {
+    int user_id;
     int movieId;
     String content;
     int parentCommentId;
-    String username;
-    int rate;  // Thêm trường đánh giá
+    int rate;
 }

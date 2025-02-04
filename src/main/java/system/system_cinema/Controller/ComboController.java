@@ -35,7 +35,7 @@ public class ComboController {
     }
 
     // For Admin
-    @GetMapping("get-combo")
+    @GetMapping("get")
     public ApiResponse<List<ComboResponse>> GetCombo() {
         try {
             return ApiResponse.<List<ComboResponse>>builder()
@@ -49,7 +49,7 @@ public class ComboController {
         }
     }
 
-    @PostMapping("create-combo")
+    @PostMapping("create")
     public ApiResponse<?> CreateCombo(@RequestBody ComboRequest comboRequest) {
         try {
             comboService.CreateCombo(comboRequest);
@@ -63,7 +63,7 @@ public class ComboController {
         }
     }
 
-    @PutMapping("edit-combo")
+    @PutMapping("edit")
     public ApiResponse<?> EditCombo(@RequestBody ComboRequest comboRequest) {
         try {
             comboService.EditCombo(comboRequest);
@@ -77,8 +77,8 @@ public class ComboController {
         }
     }
 
-    @DeleteMapping("delete-combo")
-    public ApiResponse<?> DeleteCombo(@RequestParam String comboId) {
+    @DeleteMapping("delete")
+    public ApiResponse<?> DeleteCombo(@RequestParam int comboId) {
         try {
             comboService.DeleteCombo(comboId);
             return ApiResponse.<List<ComboResponse>>builder()

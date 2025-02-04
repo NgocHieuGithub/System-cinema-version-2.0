@@ -27,7 +27,7 @@ public class SeatBooking extends BaseEntity{
     Ticket ticket;
 
     @Enumerated(EnumType.STRING)
-    Status status;
+    StatusOrder status;
 
     @Transient
     LocalDateTime dateCreate;

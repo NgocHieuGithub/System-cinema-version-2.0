@@ -20,7 +20,7 @@ public class FileUpload implements IFileUpload {
 
     @Override
     public List<String> uploadFile(MultipartFile multipartFile) throws IOException {
-        Map uploadResult = cloudinary.uploader()
+        Map<?,?> uploadResult = cloudinary.uploader()
                 .upload(multipartFile.getBytes(),
                         Map.of(
                                 "public_id", UUID.randomUUID().toString(),

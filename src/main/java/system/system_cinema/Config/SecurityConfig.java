@@ -36,7 +36,7 @@ public class SecurityConfig {
             "/swagger-ui/**","/v3/**",
             "/movies/get-all", "/movies/get",
             "/room/**",
-            "/showtimes/**",
+            "/showtimes/get-by-movie",
             "/comments/**",
             "/payment/**",
             "/seats/**",

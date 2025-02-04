@@ -13,5 +13,5 @@ public interface IComboService {
     public List<ComboResponse> getCombo();
     public void CreateCombo(ComboRequest comboRequest);
     public void EditCombo(ComboRequest comboRequest);
-    public void DeleteCombo(String comboId);
+    public void DeleteCombo(int comboId);
 }

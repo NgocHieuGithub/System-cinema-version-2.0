@@ -48,7 +48,7 @@ public class RoomService implements IRoomService {
     @Override
     public RoomResponse changeCinemaHallStatus(int id) {
         Room room = roomRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cinema Hall not found"));
+                .orElseThrow(() -> new RuntimeException("Room not found"));
         room.setStatus(room.getStatus().equals(Status.ACTIVE) ? Status.INACTIVE : Status.ACTIVE);
         Room updatedRoom = roomRepository.save(room);
         return roomMapper.toCinemaHallResponse(updatedRoom);

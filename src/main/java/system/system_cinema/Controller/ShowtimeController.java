@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import system.system_cinema.DTO.Request.ShowTimeRequestCreate;
 import system.system_cinema.DTO.Request.ShowtimeRequest;
@@ -23,26 +24,14 @@ import java.util.Map;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ShowtimeController {
-    final IShowTimeService showtimeService;
-    private final ShowTimeRepository showTimeRepository;
-    private final MovieRepository movieRepository;
-    private final ShowtimeMapper showtimeMapper;
+    IShowTimeService showtimeService;
+    ShowTimeRepository showTimeRepository;
+    MovieRepository movieRepository;
+    ShowtimeMapper showtimeMapper;
 
-    @PostMapping("/create/{cinemaHallId}")
-    public ApiResponse<ShowtimeResponse> createShowtime(@PathVariable int cinemaHallId, @RequestBody ShowtimeRequest showtimeRequest) {
-        try {
-            return ApiResponse.<ShowtimeResponse>builder()
-                    .message("Showtime created successfully")
-                    .data(showtimeService.createShowtime(cinemaHallId, showtimeRequest))
-                    .build();
-        } catch (Exception e) {
-            return ApiResponse.<ShowtimeResponse>builder()
-                    .error(e.getMessage())
-                    .build();
-        }
-    }
 //    For admin
-    @PostMapping("/admin/create")
+    @PostMapping("/create")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<?> CreateShowTimeCtr(@RequestBody ShowTimeRequestCreate requestCreate){
         try {
             showtimeService.createShowTime(requestCreate);
@@ -55,7 +44,8 @@ public class ShowtimeController {
                     .build();
         }
     }
-    @PatchMapping("/admin/update")
+    @PatchMapping("/update")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<?> UpdateShowTimeCtr(@RequestParam int showTimeId, @RequestParam int roomId){
         try {
             showtimeService.updateShowTime(showTimeId, roomId);
@@ -68,7 +58,7 @@ public class ShowtimeController {
                     .build();
         }
     }
-    @GetMapping("/admin/get-list")
+    @GetMapping("/get-list")
     public ApiResponse<?> GetShowTimeCtr(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate date
     ) {
@@ -84,7 +74,8 @@ public class ShowtimeController {
         }
     }
 
-    @GetMapping("/admin/get-all-showtime")
+    @GetMapping("/history")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<?> GetAll(@RequestParam int page) {
         try {
             return ApiResponse.<Map<?,?>>builder()
@@ -96,7 +87,8 @@ public class ShowtimeController {
                     .build();
         }
     }
-    @GetMapping("/admin/delete")
+    @GetMapping("/delete")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<?> DeleteShowTimeCtr(@RequestParam int showTimeId){
         try {
             showtimeService.deleteShowTime(showTimeId);
@@ -110,10 +102,9 @@ public class ShowtimeController {
         }
     }
 //    For user
-    @GetMapping("/user/get-by-movieid")
+    @GetMapping("/get-by-movie")
     public ApiResponse<List<?>> GetShowTimeByMovieId(@RequestParam int movieId){
         try {
-
             return ApiResponse.<List<?>>builder()
                     .data(showTimeRepository.findByMovie(movieRepository.findById(movieId).orElseThrow())
                             .stream()

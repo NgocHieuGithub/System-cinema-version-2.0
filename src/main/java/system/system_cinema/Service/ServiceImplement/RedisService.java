@@ -6,11 +6,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 import system.system_cinema.Service.IRedisService;
-
-import java.util.Collections;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -47,6 +44,11 @@ public class RedisService implements IRedisService {
         String uniqueId = UUID.randomUUID().toString();
         Boolean success = redisTemplate.opsForHash().putIfAbsent(key, fields, 1);
         return Boolean.TRUE.equals(success) ? uniqueId : null;
+    }
+
+    @Override
+    public boolean releaseLock(String key, String value) {
+        return false;
     }
 
 }

@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ComboDetailRequest {
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    String id;
+    int id;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     int quantity;
 }

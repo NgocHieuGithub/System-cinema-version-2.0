@@ -15,7 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Objects;
 import java.util.Random;
 
-@Slf4j
+@Slf4j(topic = "Mail service")
 @Service
 @RequiredArgsConstructor
 public class MailService {

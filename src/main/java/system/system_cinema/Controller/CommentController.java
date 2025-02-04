@@ -1,5 +1,6 @@
 package system.system_cinema.Controller;
 
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,13 +17,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CommentController {
-    final ICommentService commentService;
-    @PostMapping("/add/{userId}")
-    public ApiResponse<CommentResponse> addComment(@PathVariable int userId, @RequestBody CommentRequest commentRequest) {
+    ICommentService commentService;
+
+    @PostMapping("/add")
+    public ApiResponse<CommentResponse> addComment(@Valid @RequestBody CommentRequest commentRequest) {
         try {
             return ApiResponse.<CommentResponse>builder()
                     .message("Comment added successfully")
-                    .data(commentService.addComment(userId, commentRequest))
+                    .data(commentService.addComment(commentRequest))
                     .build();
         } catch (Exception e) {
             return ApiResponse.<CommentResponse>builder()
@@ -31,22 +33,8 @@ public class CommentController {
         }
     }
 
-    @GetMapping("/get/{commentId}")
-    public ApiResponse<CommentResponse> getCommentById(@PathVariable int commentId) {
-        try {
-            return ApiResponse.<CommentResponse>builder()
-                    .message("Successful")
-                    .data(commentService.getCommentById(commentId))
-                    .build();
-        } catch (Exception e) {
-            return ApiResponse.<CommentResponse>builder()
-                    .error(e.getMessage())
-                    .build();
-        }
-    }
-
-    @GetMapping("/movie/{movieId}")
-    public ApiResponse<List<CommentResponse>> getCommentsByMovie(@PathVariable int movieId) {
+    @GetMapping("/get")
+    public ApiResponse<List<CommentResponse>> getCommentsByMovie(@RequestParam int movieId) {
         try {
             return ApiResponse.<List<CommentResponse>>builder()
                     .message("Successful")
@@ -59,12 +47,12 @@ public class CommentController {
         }
     }
 
-    @PutMapping("/update/{commentId}")
-    public ApiResponse<CommentResponse> updateComment(@PathVariable int commentId, @RequestParam String newContent, @RequestParam int rate) {
+    @PutMapping("/update")
+    public ApiResponse<CommentResponse> updateComment(@RequestBody CommentRequest request) {
         try {
             return ApiResponse.<CommentResponse>builder()
                     .message("Comment updated successfully")
-                    .data(commentService.updateComment(commentId, newContent, rate))
+                    .data(commentService.updateComment(request))
                     .build();
         } catch (Exception e) {
             return ApiResponse.<CommentResponse>builder()
@@ -73,26 +61,8 @@ public class CommentController {
         }
     }
 
-    @PostMapping("/reply/{userId}/{parentCommentId}")
-    public ApiResponse<CommentResponse> replyToComment(
-            @PathVariable int userId,
-            @PathVariable int parentCommentId,
-            @RequestBody CommentRequest commentRequest) {
-        try {
-            CommentResponse replyResponse = commentService.replyToComment(userId, parentCommentId, commentRequest);
-            return ApiResponse.<CommentResponse>builder()
-                    .message("Reply added successfully")
-                    .data(replyResponse)
-                    .build();
-        } catch (Exception e) {
-            return ApiResponse.<CommentResponse>builder()
-                    .error(e.getMessage())
-                    .build();
-        }
-    }
-
-    @DeleteMapping("/delete/{commentId}")
-    public ApiResponse<?> deleteComment(@PathVariable int commentId) {
+    @DeleteMapping("/delete")
+    public ApiResponse<?> deleteComment(@RequestParam int commentId) {
         try {
             commentService.deleteComment(commentId);
             return ApiResponse.builder()

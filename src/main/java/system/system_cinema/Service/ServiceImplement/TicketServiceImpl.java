@@ -1,6 +1,8 @@
 package system.system_cinema.Service.ServiceImplement;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import system.system_cinema.DTO.Response.*;
@@ -14,14 +16,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TicketServiceImpl implements ITicketService {
-
-    private final TicketRepository ticketRepository;
-    private final UserRepository userRepository;
-    private final ShowTimeRepository showtimeRepository;
-    private final TicketMapper ticketMapper;
-    private final BookingRepository bookingRepository;
-    private final MovieRepository movieRepository;
+    TicketRepository ticketRepository;
+    UserRepository userRepository;
+    ShowTimeRepository showtimeRepository;
+    TicketMapper ticketMapper;
+    BookingRepository bookingRepository;
+    MovieRepository movieRepository;
 
     @Override
     public List<StatusTicket> getStatusTickets() {

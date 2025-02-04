@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import system.system_cinema.Config.VNPAYConfig;
 import system.system_cinema.DTO.Request.DetailsFvB;
 import system.system_cinema.DTO.Request.LockSeatsRequest;
-import system.system_cinema.Enum.Status;
+import system.system_cinema.Enum.StatusOrder;
 import system.system_cinema.Model.FoodOrder;
 import system.system_cinema.Model.SeatBooking;
 import system.system_cinema.Model.Ticket;
@@ -40,12 +40,6 @@ public class VNPayService implements IVNPayService {
     @Transactional
     public String CreateVNPayPayment(HttpServletRequest request, @RequestBody LockSeatsRequest lockSeatsRequest) {
         long amount = Integer.parseInt(request.getParameter("amount")) * 100L;
-//        List<SeatBooking> existingSeats = seatBookingRepository.findBySeatIdInAndShowTimeId(lockSeatsRequest.getSeatIds(), lockSeatsRequest.getShowtimeId());
-//        for (SeatBooking seat : existingSeats) {
-//            if ("sold".equals(seat.getStatus())) {
-//                throw new RuntimeException("Sold Seat is already held");
-//            }
-//        }
         HandleLock(lockSeatsRequest.getSeatIds(), lockSeatsRequest.getShowtimeId());
 
         List<SeatBooking> seatBookings = new ArrayList<>();
@@ -53,7 +47,7 @@ public class VNPayService implements IVNPayService {
             SeatBooking seatBooking = SeatBooking
                     .builder()
                     .seat(seatRepository.findById(seatId).orElseThrow(() -> new RuntimeException("Seat not found")))
-                    .status(Status.ACTIVE)
+                    .status(StatusOrder.ORDER)
                     .build();
             seatBookings.add(seatBooking);
         }
@@ -111,7 +105,7 @@ public class VNPayService implements IVNPayService {
     public void HandleLock (List<Integer> v1, int v2){
         List<SeatBooking> existingSeats = seatBookingRepository.findBySeatIdInAndShowTimeId(v1, v2);
         for (SeatBooking seat : existingSeats) {
-            if ("sold".equals(seat.getStatus())) {
+            if (seat.getStatus().equals(StatusOrder.ORDER)) {
                 throw new RuntimeException("Sold Seat is already held");
             }
         }

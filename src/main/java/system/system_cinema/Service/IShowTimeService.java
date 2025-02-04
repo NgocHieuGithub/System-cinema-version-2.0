@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface IShowTimeService {
-    ShowtimeResponse createShowtime(int cinemaHallId, ShowtimeRequest showtimeRequest);
     void createShowTime(ShowTimeRequestCreate requestCreate);
     void updateShowTime(int showTimeId, int roomId);
     void deleteShowTime(int showTimeId);
