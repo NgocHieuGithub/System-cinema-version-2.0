@@ -45,7 +45,7 @@ public class SeatService implements ISeatService {
         Seat seat = seatRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Seat not found"));
 
-        Room room = roomRepository.findById(request.getCinemaHallId())
+        Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new RuntimeException("Cinema Hall not found"));
 
         seat.setSeatNumber(request.getSeatNumber());

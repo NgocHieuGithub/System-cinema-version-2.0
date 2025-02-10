@@ -1,6 +1,5 @@
 package system.system_cinema.Service.ServiceImplement;
 
-import io.jsonwebtoken.Claims;
 import jakarta.mail.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
