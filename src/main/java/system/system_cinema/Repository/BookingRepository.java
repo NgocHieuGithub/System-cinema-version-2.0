@@ -3,11 +3,8 @@ package system.system_cinema.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import system.system_cinema.DTO.Response.StatisticPriceMonthResponse;
 import system.system_cinema.Model.Showtime;
 import system.system_cinema.Model.Ticket;
-import system.system_cinema.Model.User;
-
 import java.util.List;
 
 @Repository

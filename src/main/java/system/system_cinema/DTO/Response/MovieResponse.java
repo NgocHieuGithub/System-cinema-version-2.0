@@ -2,8 +2,12 @@ package system.system_cinema.DTO.Response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import system.system_cinema.Enum.Status;
+import system.system_cinema.Enum.TypeMovie;
+import system.system_cinema.Enum.TypeSeat;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -11,15 +15,15 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MovieResponse {
-    String id;
+    int id;
     String title;
-    String genre;
+    List<TypeMovie> type;
     String description;
-    String duration;
+    int duration;
     String actor;
     String director;
     LocalDate releaseDate;
     String image;
-    boolean isActive;
+    Status status;
     Double averageRating;
 }

@@ -12,10 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TicketResponse {
-    private String id, movie;
-    private int price;
-    private LocalDateTime dateBooking;
-    private List<String> infoShowTime;
-    private List<String> seatIds;
-    private List<FvBHistory> fvb;
+    int id;
+    String nameMovie;
+    int price;
+    LocalDateTime dateBooking;
+    List<String> infoShowTime;
+    List<String> seatIds;
+    List<FvBHistory> fvb;
 }

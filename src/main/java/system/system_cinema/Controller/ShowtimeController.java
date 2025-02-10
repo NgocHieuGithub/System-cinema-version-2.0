@@ -7,14 +7,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import system.system_cinema.DTO.Request.ShowTimeRequestCreate;
-import system.system_cinema.DTO.Request.ShowtimeRequest;
 import system.system_cinema.DTO.ApiResponse;
 import system.system_cinema.DTO.Response.ShowtimeResponse;
 import system.system_cinema.Mapper.ShowtimeMapper;
 import system.system_cinema.Repository.MovieRepository;
 import system.system_cinema.Repository.ShowTimeRepository;
 import system.system_cinema.Service.IShowTimeService;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +27,6 @@ public class ShowtimeController {
     MovieRepository movieRepository;
     ShowtimeMapper showtimeMapper;
 
-//    For admin
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<?> CreateShowTimeCtr(@RequestBody ShowTimeRequestCreate requestCreate){
@@ -60,9 +57,7 @@ public class ShowtimeController {
     }
     @GetMapping("/get-list")
     public ApiResponse<?> GetShowTimeCtr(
-            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate date
-    ) {
-        System.out.println(date);
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate date) {
         try {
             return ApiResponse.<Map<String, List<String>>>builder()
                     .data(showtimeService.getListShowTime(date))

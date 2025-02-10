@@ -30,7 +30,7 @@ public class MovieService implements IMovieService {
     @Override
     public List<MovieResponse> getAllMovies() {
         return movieRepository.findAll().stream()
-                .map(movieMapper::toMovieResponse)
+                .map(movieMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
@@ -39,7 +39,7 @@ public class MovieService implements IMovieService {
 
         Movie movie = movieRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Movie not found"));
-        return movieMapper.toMovieResponse(movie);
+        return movieMapper.toResponse(movie);
     }
 
     @Override
@@ -80,6 +80,6 @@ public class MovieService implements IMovieService {
 
     @Override
     public List<MovieResponse> searchMovie(String keyWords) {
-        return movieRepository.findByTitleContainingIgnoreCase(keyWords).stream().map(movieMapper::toMovieResponse).collect(Collectors.toList());
+        return movieRepository.findByTitleContainingIgnoreCase(keyWords).stream().map(movieMapper::toResponse).collect(Collectors.toList());
     }
 }

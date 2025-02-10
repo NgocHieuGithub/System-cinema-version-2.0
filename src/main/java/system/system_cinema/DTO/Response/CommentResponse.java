@@ -12,13 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentResponse {
-    String id;
-    String userId;
-    String movieId;
+    int id;
     String content;
     String username;
-    int rate;  // Thêm trường đánh giá
+    int rate;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
-    List<CommentResponse> replies;
+    int replyCount;
 }

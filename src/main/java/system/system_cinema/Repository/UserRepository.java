@@ -2,7 +2,6 @@ package system.system_cinema.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import system.system_cinema.DTO.Response.UserResponse;
 import system.system_cinema.Model.User;
@@ -12,13 +11,9 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByUsername(String username);
-    Optional<User> findByEmail(String email);
     Boolean existsByUsername(String username);
     Boolean existsByEmail(String email);
-    @Query("select new system.system_cinema.DTO.Response.UserResponse(u.id, u.name, u.email, u.phone, u.username, u.avt, null)" +
-            "from User u where u.username = :value")
-    UserResponse findByName(@Param("value") String name);
-    @Query("select new system.system_cinema.DTO.Response.UserResponse(u.id, u.name, u.email, u.phone,u.username, u.avt, u.isActive)" +
+    @Query("select new system.system_cinema.DTO.Response.UserResponse(u.id, u.name, u.email, u.phone,u.username, u.avt, u.status)" +
             "from User u")
     List<UserResponse> findUsers();
 

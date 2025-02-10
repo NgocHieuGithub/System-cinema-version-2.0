@@ -6,8 +6,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import system.system_cinema.Enum.Status;
+import system.system_cinema.Enum.TypeMovie;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,9 +19,11 @@ import java.time.LocalDate;
 public class MovieRequest {
     @NotNull(message = "Require not null")
     @NotBlank(message = "Require not blank")
-    String title, genre, description, actor, director;
+    String title, description, actor, director;
     @NotNull(message = "ReleaseDate require not null")
     LocalDate releaseDate;
     @NotNull(message = "Duration require not null")
     int duration;
+    @NotNull(message = "Type must be not null")
+    List<TypeMovie> type;
 }

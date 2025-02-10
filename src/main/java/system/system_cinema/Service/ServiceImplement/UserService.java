@@ -45,7 +45,7 @@ public class UserService implements IUserService {
         if (!user.getUsername().equals(username)) {
             throw new RuntimeException("Jwt not match information user");
         }
-        userRepository.save(userMapper.update(editUserRequest, user));
+        userRepository.save(userMapper.toUser(editUserRequest));
     }
 
     @Override

@@ -15,7 +15,6 @@ import system.system_cinema.Repository.MovieRepository;
 import system.system_cinema.Repository.RoomRepository;
 import system.system_cinema.Repository.ShowTimeRepository;
 import system.system_cinema.Service.IRoomService;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,13 +34,13 @@ public class RoomService implements IRoomService {
     public RoomResponse getCinemaHallById(int id) {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Room not found"));
-        return roomMapper.toCinemaHallResponse(room);
+        return roomMapper.toRoom(room);
     }
 
     @Override
     public List<RoomResponse> getAllCinemaHalls() {
         return roomRepository.findAll().stream()
-                .map(roomMapper::toCinemaHallResponse)
+                .map(roomMapper::toRoom)
                 .collect(Collectors.toList());
     }
 
@@ -51,7 +50,7 @@ public class RoomService implements IRoomService {
                 .orElseThrow(() -> new RuntimeException("Room not found"));
         room.setStatus(room.getStatus().equals(Status.ACTIVE) ? Status.INACTIVE : Status.ACTIVE);
         Room updatedRoom = roomRepository.save(room);
-        return roomMapper.toCinemaHallResponse(updatedRoom);
+        return roomMapper.toRoom(updatedRoom);
     }
 
     @Override
@@ -71,7 +70,7 @@ public class RoomService implements IRoomService {
 
         showtimeRepository.save(showtime);
 
-        return roomMapper.toCinemaHallResponse(room);
+        return roomMapper.toRoom(room);
     }
 
     @Override
@@ -87,6 +86,6 @@ public class RoomService implements IRoomService {
         // Tìm các phòng không có suất chiếu nào đang diễn ra hoặc sắp diễn ra sau thời điểm đó
         return roomRepository.findAll().stream()
                 .filter(room -> !occupiedRooms.contains(room))
-                .toList().stream().map(roomMapper::toCinemaHallResponse).toList();
+                .toList().stream().map(roomMapper::toRoom).toList();
     }
 }

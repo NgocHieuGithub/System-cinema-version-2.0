@@ -6,6 +6,5 @@ import system.system_cinema.Model.Ticket;
 import java.util.List;
 
 public interface TicketRepository extends JpaRepository<Ticket, Integer> {
-    List<Ticket> findByShowtimeId(String showtimeId);
-    List<Ticket> findByUserIdOrderByDateBookingDesc(String userId);
+    List<Ticket> findByUserIdOrderByDateBookingDesc(int userId);
 }

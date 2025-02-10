@@ -1,6 +1,7 @@
 package system.system_cinema.Controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,7 +23,7 @@ public class UserController {
     IUserService userService;
 
     @GetMapping("/info")
-    public ApiResponse<User> getMyInfo(@RequestParam int id) {
+    public ApiResponse<User> getMyInfo(@RequestParam @NotNull int id) {
         return new ApiResponse<>(HttpStatus.OK, userService.GetUserDetails(id));
     }
 
@@ -33,13 +34,15 @@ public class UserController {
     }
 
     @PatchMapping("/edit")
+    @PreAuthorize("hasAuthority('USER')")
     public ApiResponse<?> editProfile(@Valid @RequestBody EditUserRequest editUserRequest) {
         userService.EditUser(editUserRequest);
         return new ApiResponse<>(HttpStatus.OK);
     }
+
     @DeleteMapping("/delete")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ApiResponse<?> lockAccount(@RequestParam int id) {
+    public ApiResponse<?> lockAccount(@RequestParam @NotNull int id) {
         userService.ActivateUser(id);
         return new ApiResponse<>(HttpStatus.OK);
     }

@@ -105,7 +105,7 @@ public class ShowTimeService implements IShowTimeService {
     public Map<String, Object> getAllShowTimes(int page) {
         Pageable pageable = PageRequest.of(page, 8, Sort.by("dateCreate").descending());
         Page<Showtime> pageShowtime = showtimeRepository.findAll(pageable);
-        List<ShowTimeAndRoomResponse> showTimes = pageShowtime.getContent().stream().map(showtimeMapper::convertShowTimeCleanAdmin).toList();
+        List<ShowTimeAndRoomResponse> showTimes = pageShowtime.getContent().stream().map(showtimeMapper::convertShowTimeClean).toList();
         int totalPages = pageShowtime.getTotalPages();
 
         Map<String, Object> response = new HashMap<>();
@@ -115,8 +115,4 @@ public class ShowTimeService implements IShowTimeService {
         return response;
     }
 
-    //    Function additional
-    private int ConvertStringToInt(String s){
-        return Integer.parseInt(s.split(" ")[0]);
-    }
 }

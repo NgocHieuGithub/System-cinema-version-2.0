@@ -1,90 +1,74 @@
 package system.system_cinema.Controller;
 
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import system.system_cinema.DTO.ApiResponse;
 import system.system_cinema.DTO.Request.*;
 import system.system_cinema.DTO.Response.OTP_Response;
 import system.system_cinema.DTO.Response.TokenResponse;
-import system.system_cinema.Service.ServiceImplement.AuthenticateServiceImp;
-import system.system_cinema.Service.ServiceImplement.UserService;
+import system.system_cinema.Service.IAuthenticateService;
+import system.system_cinema.Service.IUserService;
+import java.io.UnsupportedEncodingException;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationController {
-    AuthenticateServiceImp authenticateServiceImp;
-    UserService userService;
+    IAuthenticateService authenticateService;
+    IUserService userService;
 
     @PostMapping("/login")
-    public ApiResponse<TokenResponse> login(@RequestBody LoginRequest loginRequest) {
-        try {
-            return ApiResponse.<TokenResponse>builder()
-                    .message("Successful")
-                    .data(authenticateServiceImp.authenticate(loginRequest))
-                    .build();
-        } catch (Exception e) {
-            return ApiResponse.<TokenResponse>builder()
-                    .error(e.getMessage())
-                    .build();
-        }
+    public ApiResponse<TokenResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
+        return ApiResponse.<TokenResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Successful")
+                .data(authenticateService.authenticate(loginRequest))
+                .build();
     }
 
 
     @PostMapping("/sign-up")
-    public ApiResponse<TokenResponse> signUp(@RequestBody SignUpRequest signUpRequest) {
-        try {
-            return ApiResponse.<TokenResponse>builder()
-                    .message("Successful")
-                    .data(authenticateServiceImp.signUp(signUpRequest))
-                    .build();
-        } catch (Exception e){
-            return ApiResponse.<TokenResponse>builder()
-                    .error(e.getMessage())
-                    .build();
-        }
+    public ApiResponse<TokenResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
+        return ApiResponse.<TokenResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Successful")
+                .data(authenticateService.signUp(signUpRequest))
+                .build();
     }
 
-//    @PostMapping("/refresh-token")
-//    public ApiResponse<TokenResponse> refreshToken(@RequestBody OneFieldRequest oneFieldRequest) {
-//        try {
-//            return ApiResponse.<TokenResponse>builder()
-//                    .message("Successful")
-//                    .data(authenticateServiceImp.refreshToken(oneFieldRequest.getInput()))
-//                    .build();
-//        } catch (Exception e){
-//            return ApiResponse.<TokenResponse>builder()
-//                    .error(e.getMessage())
-//                    .build();
-//        }
-//    }
-    @PostMapping("forgot-password")
-    public ApiResponse<OTP_Response> forgotPassword(@RequestBody VerifyRequest request) {
-        try {
-            return ApiResponse.<OTP_Response>builder()
-                    .data(authenticateServiceImp.createOTP(request))
-                    .build();
-        } catch (Exception e){
-            return ApiResponse.<OTP_Response>builder()
-                    .error(e.getMessage())
-                    .build();
-        }
+    @PostMapping("/refresh-token")
+    public ApiResponse<TokenResponse> refreshToken(HttpServletRequest request) {
+        return ApiResponse.<TokenResponse>builder()
+                .message("Successful")
+                .data(authenticateService.refreshToken(request.getHeader(AUTHORIZATION)))
+                .build();
     }
+
+    @PostMapping("forgot-password")
+    public ApiResponse<OTP_Response> forgotPassword(@Valid @RequestBody VerifyRequest request) throws MessagingException, UnsupportedEncodingException {
+        return ApiResponse.<OTP_Response>builder()
+                .code(HttpStatus.OK.value())
+                .message("Successful")
+                .data(authenticateService.createOTP(request))
+                .build();
+    }
+
     @PatchMapping("/update-password")
-    public ApiResponse<?> updatePassword(@RequestBody EditUserRequest editUserRequest) {
-        try {
-            System.out.println(editUserRequest.getPassword() + " " + editUserRequest.getId());
-            userService.UpdatePassword(editUserRequest);
-            return ApiResponse.builder()
-                    .message("Successful")
-                    .build();
-        } catch (Exception e){
-            return ApiResponse.builder()
-                    .error(e.getMessage())
-                    .build();
-        }
+    public ApiResponse<?> updatePassword(@Valid @RequestBody EditUserRequest editUserRequest) {
+        userService.UpdatePassword(editUserRequest);
+        return ApiResponse.builder()
+                .code(HttpStatus.OK.value())
+                .message("Successful")
+                .build();
     }
 }

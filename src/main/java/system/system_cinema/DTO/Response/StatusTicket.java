@@ -2,6 +2,7 @@ package system.system_cinema.DTO.Response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import system.system_cinema.Enum.StatusOrder;
 
 import java.time.LocalDateTime;
 
@@ -11,8 +12,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StatusTicket {
-    String id, movie, room;
-    boolean status;
+    int id;
+    String room;
+    String movie;
+    StatusOrder status;
     long price;
     LocalDateTime time;
 }

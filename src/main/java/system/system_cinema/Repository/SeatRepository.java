@@ -9,7 +9,6 @@ import system.system_cinema.Model.Seat;
 import java.util.List;
 
 public interface SeatRepository extends JpaRepository<Seat, Integer> {
-    List<Seat> findByCinemaHallId(String cinemaHallId);
 
     @Query("SELECT new system.system_cinema.DTO.Response.SeatResponse(" +
             "s.id, s.seatNumber, s.type ," +

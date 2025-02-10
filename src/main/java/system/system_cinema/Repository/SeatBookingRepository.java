@@ -9,7 +9,6 @@ import system.system_cinema.Model.SeatBooking;
 import java.util.List;
 
 public interface SeatBookingRepository extends JpaRepository<SeatBooking, Integer> {
-    List<SeatBooking> findByTicketId(int ticketId);
     @Lock(LockModeType.PESSIMISTIC_READ)
     @Query( " select sb " +
             " from SeatBooking sb" +

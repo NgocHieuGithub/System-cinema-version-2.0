@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ITicketService {
     List<StatusTicket> getStatusTickets();
-    List<TicketResponse> getTicketsByUser(String userId);
+    List<TicketResponse> getTicketsByUser(int userId);
     List<StatisticPriceMonthResponse> statisticPriceMonth();
     List<StatisticUserTicket> statisticUserTicket();
     List<StatisticMovieRevenue> statisticMovieRevenue();

@@ -2,9 +2,11 @@ package system.system_cinema.Controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import system.system_cinema.DTO.ApiResponse;
 import system.system_cinema.DTO.Request.LockSeatsRequest;
@@ -20,24 +22,19 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class VNPayController {
-    IVNPayService service;
-    private final BookingRepository bookingRepository;
+
+    IVNPayService vnPayService;
+    BookingRepository bookingRepository;
 
     @PostMapping("/vn-pay")
-    public ApiResponse<?> pay(HttpServletRequest request,@RequestBody LockSeatsRequest lockSeatsRequest) {
-        System.out.println(lockSeatsRequest.getShowtimeId() + " " + lockSeatsRequest.getUserId());
-        try {
-            return ApiResponse
-                    .builder()
-                    .data(service.HandleOrder(request, lockSeatsRequest))
-                    .build();
-        } catch (Exception e) {
-            return ApiResponse
-                    .builder()
-                    .message(e.getMessage())
-                    .build();
-        }
+    public ApiResponse<?> pay(HttpServletRequest request, @Valid @RequestBody LockSeatsRequest lockSeatsRequest) {
+        return ApiResponse.builder()
+                .code(HttpStatus.OK.value())
+                .message(HttpStatus.OK.getReasonPhrase())
+                .data(vnPayService.HandleOrder(request, lockSeatsRequest))
+                .build();
     }
+
     @GetMapping("/vn-pay-callback")
     public void payCallbackHandler(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Integer idTicket = Integer.valueOf(request.getParameter("ticket"));

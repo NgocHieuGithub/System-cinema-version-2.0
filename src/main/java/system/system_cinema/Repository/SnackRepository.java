@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface SnackRepository extends JpaRepository<Snack, Integer> {
     List<Snack> findByNameContainingIgnoreCase(String name);
-    @Query("SELECT s FROM Snack s WHERE s.active = true")
+    @Query("SELECT s FROM Snack s WHERE s.status = 'AVTIVE'")
     List<Snack> findAllActiveSnacks();
 }

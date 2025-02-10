@@ -3,16 +3,16 @@
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import system.system_cinema.Enum.Status;
 
-@Data
+    @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
-    String id;
+    int id;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     String name, email, phone, username, avt;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    Boolean isActive;
+    Status status;
 }

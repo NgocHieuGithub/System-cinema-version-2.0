@@ -1,6 +1,8 @@
 package system.system_cinema.Service.ServiceImplement;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import system.system_cinema.DTO.Request.SeatRequest;
 import system.system_cinema.DTO.Response.SeatResponse;
@@ -16,6 +18,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SeatService implements ISeatService {
 
     SeatRepository seatRepository;
@@ -29,8 +32,8 @@ public class SeatService implements ISeatService {
 
     @Override
     public SeatResponse createSeat(SeatRequest request) {
-        Room room = roomRepository.findById(request.getCinemaHallId())
-                .orElseThrow(() -> new RuntimeException("Cinema Hall not found"));
+        Room room = roomRepository.findById(request.getRoomId())
+                .orElseThrow(() -> new RuntimeException("Room not found"));
 
         Seat seat = seatMapper.toSeat(request);
         seat.setRoom(room);

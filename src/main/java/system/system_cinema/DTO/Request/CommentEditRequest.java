@@ -11,14 +11,14 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CommentRequest {
-    @NotNull(message = "id movie must be not null")
-    int movieId;
+public class CommentEditRequest {
+    @NotNull(message = "id user must be not null")
+    int user_id;
+    @NotNull(message = "id comment must be not null")
+    int commentId;
     @NotNull(message = "comment must be not null")
     @NotBlank(message = "comment must be not blank")
     String content;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    int parentCommentId;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     int rate;
 }

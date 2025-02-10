@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class SeatBookingResponse {
-    private String id;
-    private String seatId;
-    private String ticketId;
+    private int id;
+    private int seatId;
+    private int ticketId;
 }

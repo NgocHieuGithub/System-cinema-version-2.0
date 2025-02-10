@@ -15,24 +15,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SeatBookingService implements ISeatBookingService {
-    SeatBookingRepository seatBookingRepository;
+
     @Override
-    @Transactional
     public boolean lockSeats(List<Integer> seatIds, int showtimeId, int userId) {
-        List<SeatBooking> existingSeats = seatBookingRepository.findBySeatIdInAndShowTimeId(seatIds, showtimeId);
-
-        for (SeatBooking seat : existingSeats) {
-            if ("sold".equals(seat.getStatus()) || "held".equals(seat.getStatus())) {
-                return false;
-            }
-        }
-
-        for (Integer seatId : seatIds) {
-            SeatBooking seatBooking = SeatBooking.builder().build();
-//            seatBooking.setStatus("held");
-            seatBookingRepository.save(seatBooking);
-        }
-
-        return true;
+        return false;
     }
 }

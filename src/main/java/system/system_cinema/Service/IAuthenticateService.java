@@ -10,7 +10,6 @@ import system.system_cinema.DTO.Response.TokenResponse;
 
 import java.io.UnsupportedEncodingException;
 
-@Service
 public interface IAuthenticateService {
     TokenResponse authenticate(LoginRequest loginRequest);
     TokenResponse signUp(SignUpRequest signUpRequest);
