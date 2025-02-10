@@ -1,6 +1,7 @@
 package system.system_cinema.DTO.Request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -16,5 +17,14 @@ public class SignUpRequest {
     @Pattern(regexp = "^[^/:*?\"<>|]+$", message = "Not valid")
     @NotBlank(message = "Value must be not blank")
     @NotNull(message = "Value must be not null")
-    String username, password, email;
+    String username;
+    @Pattern(regexp = "^[^/:*?\"<>|]+$", message = "Not valid")
+    @NotBlank(message = "Value must be not blank")
+    @NotNull(message = "Value must be not null")
+    @Min(value = 8,message = "Require length min 8")
+    String password;
+    @Pattern(regexp = "^[^/:*?\"<>|]+$", message = "Not valid")
+    @NotBlank(message = "Value must be not blank")
+    @NotNull(message = "Value must be not null")
+    String email;
 }

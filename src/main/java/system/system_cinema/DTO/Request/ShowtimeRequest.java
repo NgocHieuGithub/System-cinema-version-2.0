@@ -1,5 +1,6 @@
 package system.system_cinema.DTO.Request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ShowtimeRequest {
+    @NotNull(message = "id movie must be not null")
     int movieId;
     LocalDateTime startTime;
     LocalDateTime endTime;

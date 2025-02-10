@@ -1,9 +1,19 @@
 package system.system_cinema.DTO.Request;
 
-import lombok.Data;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class TypeSeatRequest {
-    private String typeName; // Tên loại ghế (thêm mới)
-    private int price;       // Giá loại ghế
+    @NotNull(message = "type name must be not null")
+    @NotBlank(message = "type name must be not blank")
+    String typeName;
+    @NotNull(message = "price must be not null")
+    int price;
 }

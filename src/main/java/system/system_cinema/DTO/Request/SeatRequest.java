@@ -1,10 +1,19 @@
 package system.system_cinema.DTO.Request;
 
-import lombok.Data;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class SeatRequest {
-    private String seatNumber;       // Số ghế
-    private int cinemaHallId;     // ID phòng chiếu
-    private int typeSeatId;       // ID loại ghế
+    @NotNull(message = "seat number must be not null")
+    String seatNumber;
+    @NotNull(message = "id room must be not null")
+    int roomId;
+    @NotNull(message = "type seat must be not null")
+    int typeSeatId;
 }
