@@ -33,16 +33,10 @@ import system.system_cinema.Service.IUserService;
 public class SecurityConfig {
     String[] WHITE_LIST = {
             "/auth/**",
-            "/swagger-ui/**","/v3/**",
+            "/actuator/**", "/v3/**", "/webjars/**", "/swagger-ui*/*swagger-initializer.js", "/swagger-ui*/**",
             "/movies/get-all", "/movies/get",
-            "/room/**",
             "/showtimes/get-by-movie",
             "/comments/**",
-            "/payment/**",
-            "/seats/**",
-            "/tickets/**",
-            "/combo/**",
-            "/snacks/**"
     };
     IUserService userService;
     Prefilter preFilter;

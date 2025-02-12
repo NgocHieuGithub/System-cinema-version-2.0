@@ -1,18 +1,19 @@
 package system.system_cinema.DTO.Response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import system.system_cinema.Enum.StatusOrder;
+import system.system_cinema.Enum.StatusSeat;
+import system.system_cinema.Enum.TypeSeat;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class SeatResponse {
-    private String seatId;
-    private String seatNumber;
-    private String typeName;
-    private int seatPrice;
-    private String seatStatus;
+    int seatId;
+    String seatNumber;
+    TypeSeat typeName;
+    StatusSeat status;
 }

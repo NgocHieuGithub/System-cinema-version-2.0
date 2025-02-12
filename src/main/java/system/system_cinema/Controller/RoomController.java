@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import system.system_cinema.DTO.Request.RoomCreateRequest;
 import system.system_cinema.DTO.Request.ShowtimeRequest;
 import system.system_cinema.DTO.ApiResponse;
 import system.system_cinema.DTO.Response.RoomResponse;
@@ -28,21 +29,22 @@ public class RoomController {
         return ApiResponse.<RoomResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Successful")
-                .data(roomService.getCinemaHallById(id))
+                .data(roomService.getRoomById(id))
                 .build();
     }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/get-all")
     public ApiResponse<List<RoomResponse>> getAllRoom() {
         return ApiResponse.<List<RoomResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Successful")
-                .data(roomService.getAllCinemaHalls())
+                .data(roomService.getAllRoom())
                 .build();
     }
 
-    @PutMapping("/change")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @PutMapping("/change")
     public ApiResponse<RoomResponse> ChangeRoomStatus(@RequestParam @NotNull int id) {
         return ApiResponse.<RoomResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -51,8 +53,18 @@ public class RoomController {
                 .build();
     }
 
-    @PostMapping("/add-showtime/{cinemaHallId}")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/create")
+    public ApiResponse<?> CreateRoom(@Valid @RequestBody RoomCreateRequest request) {
+        roomService.CreateRoom(request);
+        return ApiResponse.<RoomResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Showtime added successfully")
+                .build();
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/add-showtime/{cinemaHallId}")
     public ApiResponse<RoomResponse> addShowtime(@PathVariable @NotNull int cinemaHallId, @Valid @RequestBody ShowtimeRequest showtimeRequest) {
         return ApiResponse.<RoomResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -61,8 +73,8 @@ public class RoomController {
                 .build();
     }
 
-    @GetMapping("/check-available-room")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/check-available-room")
     public ApiResponse<List<RoomResponse>> checkAvailableRoom(@RequestParam @NotNull LocalDateTime time) {
         return ApiResponse.<List<RoomResponse>>builder()
                 .code(HttpStatus.OK.value())

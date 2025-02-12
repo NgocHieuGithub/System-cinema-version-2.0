@@ -29,7 +29,7 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class AuthenticateServiceImp implements IAuthenticateService {
+public class AuthenticateService implements IAuthenticateService {
     AuthenticationManager authenticationManager;
     UserRepository userRepository;
     JwtService jwtService;

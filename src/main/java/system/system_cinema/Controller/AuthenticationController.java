@@ -54,7 +54,7 @@ public class AuthenticationController {
                 .build();
     }
 
-    @PostMapping("forgot-password")
+    @PostMapping("/forgot-password")
     public ApiResponse<OTP_Response> forgotPassword(@Valid @RequestBody VerifyRequest request) throws MessagingException, UnsupportedEncodingException {
         return ApiResponse.<OTP_Response>builder()
                 .code(HttpStatus.OK.value())

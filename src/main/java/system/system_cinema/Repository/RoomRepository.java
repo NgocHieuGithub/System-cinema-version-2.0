@@ -7,4 +7,5 @@ import system.system_cinema.Model.Room;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Integer> {
+    boolean existsByName(String name);
 }

@@ -40,25 +40,25 @@ public class CommentController {
         return ApiResponse.<List<CommentResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Successful")
-                .data(commentService.getRepliesByParentId(commentId, size, page))
+                .data(commentService.getRepliesByParentId(commentId, page, size))
                 .build();
     }
 
     @PostMapping("/add")
     public ApiResponse<CommentResponse> addComment(@Valid @RequestBody CommentRequest commentRequest) {
+        commentService.addComment(commentRequest);
         return ApiResponse.<CommentResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Comment added successfully")
-                .data(commentService.addComment(commentRequest))
                 .build();
     }
 
     @PatchMapping("/update")
     public ApiResponse<CommentResponse> updateComment(@Valid @RequestBody CommentEditRequest request) {
+        commentService.updateComment(request);
         return ApiResponse.<CommentResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Comment updated successfully")
-                .data(commentService.updateComment(request))
                 .build();
     }
 

@@ -29,4 +29,5 @@ public class Room extends BaseEntity{
     @JsonIgnore
     List<Showtime> showtimes;
 
+    int quantity;
 }

@@ -29,5 +29,5 @@ public class Combo extends BaseEntity{
 
     @JsonIgnore
     @OneToMany(mappedBy = "combo")
-    List<FoodBeverageOrder> foodBeverageOrders;
+    List<FoodOrder> foodBeverageOrders;
 }

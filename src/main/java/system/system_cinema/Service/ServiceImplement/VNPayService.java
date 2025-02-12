@@ -13,6 +13,7 @@ import system.system_cinema.Config.VNPAYConfig;
 import system.system_cinema.DTO.Request.DetailsFvB;
 import system.system_cinema.DTO.Request.LockSeatsRequest;
 import system.system_cinema.Enum.StatusOrder;
+import system.system_cinema.Enum.StatusSeat;
 import system.system_cinema.Model.FoodOrder;
 import system.system_cinema.Model.SeatBooking;
 import system.system_cinema.Model.Ticket;
@@ -71,7 +72,7 @@ public class VNPayService implements IVNPayService {
                 SeatBooking seatBooking = SeatBooking
                         .builder()
                         .seat(seatRepository.findById(seatId).orElseThrow(() -> new RuntimeException("Seat not found")))
-                        .status(StatusOrder.ORDER)
+                        .status(StatusSeat.OCCUPIED)
                         .build();
                 seatBookings.add(seatBooking);
             }

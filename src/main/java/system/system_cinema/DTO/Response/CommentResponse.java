@@ -16,7 +16,7 @@ public class CommentResponse {
     String content;
     String username;
     int rate;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
+    LocalDateTime dateCreate;
+    LocalDateTime dateUpdate;
     int replyCount;
 }

@@ -27,8 +27,8 @@ public class ShowtimeController {
     MovieRepository movieRepository;
     ShowtimeMapper showtimeMapper;
 
-    @PostMapping("/create")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/create")
     public ApiResponse<?> CreateShowTimeCtr(@RequestBody ShowTimeRequestCreate requestCreate){
         try {
             showtimeService.createShowTime(requestCreate);
@@ -41,8 +41,9 @@ public class ShowtimeController {
                     .build();
         }
     }
-    @PatchMapping("/update")
+
     @PreAuthorize("hasAuthority('ADMIN')")
+    @PatchMapping("/update")
     public ApiResponse<?> UpdateShowTimeCtr(@RequestParam int showTimeId, @RequestParam int roomId){
         try {
             showtimeService.updateShowTime(showTimeId, roomId);
@@ -55,6 +56,8 @@ public class ShowtimeController {
                     .build();
         }
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/get-list")
     public ApiResponse<?> GetShowTimeCtr(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate date) {
@@ -69,8 +72,8 @@ public class ShowtimeController {
         }
     }
 
-    @GetMapping("/history")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/history")
     public ApiResponse<?> GetAll(@RequestParam int page) {
         try {
             return ApiResponse.<Map<?,?>>builder()
@@ -82,8 +85,9 @@ public class ShowtimeController {
                     .build();
         }
     }
-    @GetMapping("/delete")
+
     @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/delete")
     public ApiResponse<?> DeleteShowTimeCtr(@RequestParam int showTimeId){
         try {
             showtimeService.deleteShowTime(showTimeId);

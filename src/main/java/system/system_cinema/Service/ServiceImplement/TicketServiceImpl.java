@@ -32,7 +32,7 @@ public class TicketServiceImpl implements ITicketService {
 
     @Override
     public List<TicketResponse> getTicketsByUser(int userId) {
-        return ticketRepository.findByUserIdOrderByDateBookingDesc(userId).stream()
+        return ticketRepository.findByUserIdOrderByDateCreateDesc(userId).stream()
                 .map(ticketMapper::toTicketResponse)
                 .collect(Collectors.toList());
     }

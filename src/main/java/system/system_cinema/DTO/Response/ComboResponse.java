@@ -1,5 +1,6 @@
 package system.system_cinema.DTO.Response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,8 +12,14 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ComboResponse {
-    String id, name, img;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    int id;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    String name, img;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     int price;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     boolean active;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     List<InfoComboResponse> infoCombo;
 }

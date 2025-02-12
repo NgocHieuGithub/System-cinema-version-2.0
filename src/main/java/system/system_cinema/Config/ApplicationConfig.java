@@ -13,8 +13,6 @@ import system.system_cinema.Enum.Role;
 import system.system_cinema.Enum.Status;
 import system.system_cinema.Model.User;
 import system.system_cinema.Repository.UserRepository;
-import java.time.LocalDateTime;
-
 
 @Configuration
 @RequiredArgsConstructor
@@ -34,7 +32,6 @@ public class ApplicationConfig {
                         .username("admin")
                         .password(passwordEncoder().encode("admin"))
                         .role(Role.ADMIN)
-                        .dateCreate(LocalDateTime.now())
                         .status(Status.ACTIVE)
                         .build();
                 userRepository.save(user);

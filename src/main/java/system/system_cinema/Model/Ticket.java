@@ -19,6 +19,7 @@ import java.util.List;
 public class Ticket extends BaseEntity{
 
     int price;
+    @Enumerated(EnumType.STRING)
     StatusOrder status;
 
     @ManyToOne

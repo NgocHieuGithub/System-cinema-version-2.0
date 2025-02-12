@@ -22,26 +22,27 @@ import java.util.List;
 public class UserController {
     IUserService userService;
 
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/info")
     public ApiResponse<User> getMyInfo(@RequestParam @NotNull int id) {
         return new ApiResponse<>(HttpStatus.OK, userService.GetUserDetails(id));
     }
 
-    @GetMapping("/list-user")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/list-user")
     public ApiResponse<List<UserResponse>> getListUser() {
         return new ApiResponse<>(HttpStatus.OK, userService.GetAllUsers());
     }
 
-    @PatchMapping("/edit")
     @PreAuthorize("hasAuthority('USER')")
+    @PatchMapping("/edit")
     public ApiResponse<?> editProfile(@Valid @RequestBody EditUserRequest editUserRequest) {
         userService.EditUser(editUserRequest);
         return new ApiResponse<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping("/delete")
     public ApiResponse<?> lockAccount(@RequestParam @NotNull int id) {
         userService.ActivateUser(id);
         return new ApiResponse<>(HttpStatus.OK);

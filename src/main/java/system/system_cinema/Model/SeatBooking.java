@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 import system.system_cinema.Enum.Status;
 import system.system_cinema.Enum.StatusOrder;
+import system.system_cinema.Enum.StatusSeat;
 
 import java.time.LocalDateTime;
 
@@ -27,7 +28,7 @@ public class SeatBooking extends BaseEntity{
     Ticket ticket;
 
     @Enumerated(EnumType.STRING)
-    StatusOrder status;
+    StatusSeat status;
 
     @Transient
     LocalDateTime dateCreate;

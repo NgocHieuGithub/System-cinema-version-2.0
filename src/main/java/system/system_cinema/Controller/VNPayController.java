@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import system.system_cinema.DTO.ApiResponse;
 import system.system_cinema.DTO.Request.LockSeatsRequest;
@@ -26,6 +27,7 @@ public class VNPayController {
     IVNPayService vnPayService;
     BookingRepository bookingRepository;
 
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/vn-pay")
     public ApiResponse<?> pay(HttpServletRequest request, @Valid @RequestBody LockSeatsRequest lockSeatsRequest) {
         return ApiResponse.builder()
@@ -41,10 +43,10 @@ public class VNPayController {
         Ticket ticket = bookingRepository.findById(idTicket).orElseThrow(() -> new RuntimeException("Ticket not found"));
         String url_direct;
         if ("00".equals(request.getParameter("vnp_ResponseCode"))) {
-            ticket.setStatus(StatusOrder.ORDER);
+            ticket.setStatus(StatusOrder.SUCCESS);
             url_direct = "http://localhost:3000/payment-success";
         } else {
-            ticket.setStatus(StatusOrder.INORDER);
+            ticket.setStatus(StatusOrder.FAILED);
             url_direct = "http://localhost:3000/payment-failure";
         }
         bookingRepository.save(ticket);

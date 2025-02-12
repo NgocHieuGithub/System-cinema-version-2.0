@@ -4,18 +4,23 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import system.system_cinema.DTO.Request.RoomCreateRequest;
 import system.system_cinema.DTO.Request.ShowtimeRequest;
 import system.system_cinema.DTO.Response.RoomResponse;
 import system.system_cinema.Enum.Status;
+import system.system_cinema.Enum.TypeSeat;
 import system.system_cinema.Mapper.RoomMapper;
 import system.system_cinema.Model.Movie;
 import system.system_cinema.Model.Room;
+import system.system_cinema.Model.Seat;
 import system.system_cinema.Model.Showtime;
 import system.system_cinema.Repository.MovieRepository;
 import system.system_cinema.Repository.RoomRepository;
+import system.system_cinema.Repository.SeatRepository;
 import system.system_cinema.Repository.ShowTimeRepository;
 import system.system_cinema.Service.IRoomService;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,22 +28,21 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RoomService implements IRoomService {
-
-
     ShowTimeRepository showtimeRepository;
     MovieRepository movieRepository;
     RoomMapper roomMapper;
     RoomRepository roomRepository;
+    SeatRepository seatRepository;
 
     @Override
-    public RoomResponse getCinemaHallById(int id) {
+    public RoomResponse getRoomById(int id) {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Room not found"));
         return roomMapper.toRoom(room);
     }
 
     @Override
-    public List<RoomResponse> getAllCinemaHalls() {
+    public List<RoomResponse> getAllRoom() {
         return roomRepository.findAll().stream()
                 .map(roomMapper::toRoom)
                 .collect(Collectors.toList());
@@ -87,5 +91,51 @@ public class RoomService implements IRoomService {
         return roomRepository.findAll().stream()
                 .filter(room -> !occupiedRooms.contains(room))
                 .toList().stream().map(roomMapper::toRoom).toList();
+    }
+
+    @Override
+    public void CreateRoom(RoomCreateRequest request) {
+        if (roomRepository.existsByName(request.getName())){
+            throw new RuntimeException("Room name already exists");
+        }
+        Room room = new Room();
+        room.setName(request.getName());
+        room.setQuantity(request.getVipSeats() + request.getCoupleSeats() + request.getNormalSeats());
+        room.setStatus(Status.ACTIVE);
+        Room savedRoom = roomRepository.save(room);
+
+        List<Seat> seats = new ArrayList<>();
+        if (request.getVipSeats() != 0){
+            for (int i = 1; i <= request.getVipSeats(); i++) {
+                Seat seat = new Seat();
+                seat.setRoom(savedRoom);
+                seat.setType(TypeSeat.Vip);
+                seat.setSeatNumber("V-" + i);
+                seats.add(seat);
+            }
+        }
+
+        if (request.getNormalSeats() != 0){
+            for (int i = 1; i <= request.getNormalSeats(); i++) {
+                Seat seat = new Seat();
+                seat.setRoom(savedRoom);
+                seat.setType(TypeSeat.Normal);
+                seat.setSeatNumber("N-" + i);
+                seats.add(seat);
+            }
+
+        }
+
+        if (request.getCoupleSeats() != 0){
+            for (int i = 1; i <= request.getCoupleSeats(); i++) {
+                Seat seat = new Seat();
+                seat.setRoom(savedRoom);
+                seat.setType(TypeSeat.Couple);
+                seat.setSeatNumber("C-" + i);
+                seats.add(seat);
+            }
+
+        }
+        seatRepository.saveAll(seats);
     }
 }

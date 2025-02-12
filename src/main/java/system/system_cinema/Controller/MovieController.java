@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import system.system_cinema.DTO.ApiResponse;
@@ -41,6 +42,7 @@ public class MovieController {
                 .build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create")
     public ApiResponse<MovieResponse> createMovie(
             @Valid @RequestPart MovieRequest movieRequest,
@@ -52,6 +54,7 @@ public class MovieController {
                 .build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/update/{id}")
     public ApiResponse<MovieResponse> updateMovie(
             @PathVariable @NotNull int id,
@@ -64,6 +67,7 @@ public class MovieController {
                 .build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ApiResponse<?> deleteMovie(@PathVariable @NotNull int id) {
         movieService.deleteMovie(id);

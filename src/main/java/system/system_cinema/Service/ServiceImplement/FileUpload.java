@@ -1,7 +1,9 @@
 package system.system_cinema.Service.ServiceImplement;
 
 import com.cloudinary.Cloudinary;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import system.system_cinema.Service.IFileUpload;
@@ -14,6 +16,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class FileUpload implements IFileUpload {
 
     Cloudinary cloudinary;
