@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ISeatService {
 
-    List<SeatResponse> getSeatsByCinemaHall(int showTimeId);
+    List<SeatResponse> getSeatsByRoom(int showTimeId);
 
     SeatResponse createSeat(SeatRequest request);
 

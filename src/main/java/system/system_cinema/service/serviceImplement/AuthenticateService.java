@@ -22,6 +22,7 @@ import system.system_cinema.constant.Status;
 import system.system_cinema.domain.User;
 import system.system_cinema.repository.UserRepository;
 import system.system_cinema.service.IAuthenticateService;
+import system.system_cinema.service.IKafkaProducerService;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
@@ -35,13 +36,15 @@ public class AuthenticateService implements IAuthenticateService {
     JwtService jwtService;
     PasswordEncoder getPasswordEncoder;
     MailService mailService;
+    IKafkaProducerService kafkaProducerService;
+
     @NonFinal
     @Value("${jwt.valid-duration}")
-    protected long VALID_DURATION;
+    long VALID_DURATION;
 
     @NonFinal
     @Value("${jwt.refreshable-duration}")
-    protected long REFRESHABLE_DURATION;
+    long REFRESHABLE_DURATION;
 
     // Sign in
     @Override
@@ -99,15 +102,9 @@ public class AuthenticateService implements IAuthenticateService {
 
 
     @Override
-    public OTP_Response createOTP(VerifyRequest verifyRequest) throws MessagingException, UnsupportedEncodingException {
-        String id = String.valueOf(userRepository.findByEmailAndUsername(verifyRequest.getEmail(), verifyRequest.getUsername()).orElseThrow(() -> new UsernameNotFoundException("Not found user") ).getId());
-        String code = mailService.sendEmail(verifyRequest.getEmail());
-        return OTP_Response
-                .builder()
-                .code(code)
-                .expiration(LocalDateTime.now())
-                .id(id)
-                .build();
+    public void createOTP(VerifyRequest verifyRequest) {
+        userRepository.findByEmailAndUsername(verifyRequest.getEmail(), verifyRequest.getUsername()).orElseThrow(() -> new UsernameNotFoundException("Not found user"));
+        kafkaProducerService.SendMessage("send_mail","change_password" , verifyRequest.getEmail());
     }
 
 }

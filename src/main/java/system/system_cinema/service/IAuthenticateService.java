@@ -13,5 +13,5 @@ public interface IAuthenticateService {
     TokenResponse authenticate(LoginRequest loginRequest);
     TokenResponse signUp(SignUpRequest signUpRequest);
     TokenResponse refreshToken(String refreshToken);
-    OTP_Response createOTP(VerifyRequest request) throws MessagingException, UnsupportedEncodingException;
+    void createOTP(VerifyRequest request) ;
 }

@@ -36,6 +36,22 @@ spring:
         multipart:
             max-file-size: ${SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE}
             max-request-size: ${SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE}
+    data:
+        redis:
+            host: ${REDIS_HOST}
+            port: ${REDIS_PORT}
+    kafka:
+        bootstrap-servers: ${KAFKA_SERVER}
+        consumer:
+            group-id: ${KAFKA_GROUP_ID}
+            auto-offset-reset: ${AUTO_OFFSET_RESET}
+            key-deserializer: ${CONSUMER_KEY}
+            value-deserializer: ${CONSUMER_VALUE}
+        properties:
+            spring.json.trusted.packages: ${KAFKA_PROPERTIES}
+        producer:
+            key-serializer: ${PRODUCER_KEY}
+            value-serializer: ${PRODUCER_VALUE}
 
 payment:
     vnPay:

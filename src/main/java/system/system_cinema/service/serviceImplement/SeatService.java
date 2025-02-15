@@ -6,7 +6,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import system.system_cinema.dto.request.SeatRequest;
 import system.system_cinema.dto.response.SeatResponse;
-import system.system_cinema.constant.TypeSeat;
 import system.system_cinema.mapper.SeatMapper;
 import system.system_cinema.domain.Room;
 import system.system_cinema.domain.Seat;
@@ -26,7 +25,7 @@ public class SeatService implements ISeatService {
     SeatMapper seatMapper;
 
     @Override
-    public List<SeatResponse> getSeatsByCinemaHall(int showTimeId) {
+    public List<SeatResponse> getSeatsByRoom(int showTimeId) {
         return seatRepository.findSeatsWithTypeAndStatusByShowTime(showTimeId);
     }
 
@@ -34,13 +33,15 @@ public class SeatService implements ISeatService {
     public SeatResponse createSeat(SeatRequest request) {
         Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new RuntimeException("Room not found"));
+        if (room.getQuantity() > room.getSeats().size()){
+            Seat seat = seatMapper.toSeat(request);
+            seat.setRoom(room);
+            seat.setType(request.getTypeSeat());
+            return seatMapper.toSeatResponse(seatRepository.save(seat));
+        } else {
+            throw new RuntimeException("Số lượng ghế của phòng đã max");
+        }
 
-        Seat seat = seatMapper.toSeat(request);
-        seat.setRoom(room);
-        seat.setType(TypeSeat.Normal);
-
-        Seat savedSeat = seatRepository.save(seat);
-        return seatMapper.toSeatResponse(savedSeat);
     }
 
     @Override
@@ -49,11 +50,11 @@ public class SeatService implements ISeatService {
                 .orElseThrow(() -> new RuntimeException("Seat not found"));
 
         Room room = roomRepository.findById(request.getRoomId())
-                .orElseThrow(() -> new RuntimeException("Cinema Hall not found"));
+                .orElseThrow(() -> new RuntimeException("Room not found"));
 
         seat.setSeatNumber(request.getSeatNumber());
         seat.setRoom(room);
-        seat.setType(TypeSeat.Normal);
+        seat.setType(request.getTypeSeat());
 
         Seat updatedSeat = seatRepository.save(seat);
         return seatMapper.toSeatResponse(updatedSeat);
