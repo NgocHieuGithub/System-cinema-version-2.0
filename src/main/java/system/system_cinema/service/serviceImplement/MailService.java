@@ -77,7 +77,7 @@ public class MailService implements IMailService {
         helper.setSubject(SUBJECT);
         String code = generateRandomNumber();
         String CONTENT = "Xin chào,\n" +
-                "Cảm ơn baạn đã order: " + code +".\n" +
+                "Cảm ơn bạn đã order: " + code +".\n" +
                 "Trân trọng, " + "Hệ thống đặt vé xem phim HKT";
         helper.setText(CONTENT, true);
         mailSender.send(message);
