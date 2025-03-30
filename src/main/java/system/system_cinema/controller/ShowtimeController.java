@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import system.system_cinema.dto.request.ShowTimeRequestCreate;
 import system.system_cinema.dto.ApiResponse;
@@ -27,7 +26,6 @@ public class ShowtimeController {
     MovieRepository movieRepository;
     ShowtimeMapper showtimeMapper;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create")
     public ApiResponse<?> CreateShowTimeCtr(@RequestBody ShowTimeRequestCreate requestCreate){
         try {
@@ -42,7 +40,6 @@ public class ShowtimeController {
         }
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PatchMapping("/update")
     public ApiResponse<?> UpdateShowTimeCtr(@RequestParam int showTimeId, @RequestParam int roomId){
         try {
@@ -57,7 +54,6 @@ public class ShowtimeController {
         }
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/get-list")
     public ApiResponse<?> GetShowTimeCtr(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate date) {
@@ -72,7 +68,6 @@ public class ShowtimeController {
         }
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/history")
     public ApiResponse<?> GetAll(@RequestParam int page) {
         try {
@@ -86,7 +81,6 @@ public class ShowtimeController {
         }
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/delete")
     public ApiResponse<?> DeleteShowTimeCtr(@RequestParam int showTimeId){
         try {

@@ -17,4 +17,8 @@ public class KafkaProducerService implements IKafkaProducerService {
     public void SendMessage(String topic ,String key, String message) {
         kafkaTemplate.send(topic, key, message);
     }
+//
+//    public void SendMessageV2(String topic ,String key, String message) {
+//        kafkaTemplate.send(topic, key, message);
+//    }
 }

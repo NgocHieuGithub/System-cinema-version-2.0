@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import system.system_cinema.dto.ApiResponse;
 import system.system_cinema.dto.request.SnackRequest;
@@ -22,7 +21,6 @@ import java.util.List;
 public class SnackController {
     ISnackService snackService;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("search-snacks")
     public ApiResponse<List<SnackResponse>> searchSnacks(@RequestParam @NotNull String keyword) {
         return ApiResponse.<List<SnackResponse>>builder()
@@ -32,7 +30,6 @@ public class SnackController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("get-snacks")
     public ApiResponse<List<Snack>> getSnacks() {
         return ApiResponse.<List<Snack>>builder()
@@ -42,7 +39,6 @@ public class SnackController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("create-snacks")
     public ApiResponse<?> createSnacks(@Valid @RequestBody SnackRequest request) {
         snackService.createSnack(request);
@@ -52,7 +48,6 @@ public class SnackController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("edit-snacks")
     public ApiResponse<?> editSnacks(@Valid @RequestBody SnackRequest request) {
         snackService.editSnack(request);
@@ -62,7 +57,6 @@ public class SnackController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("delete-snacks")
     public ApiResponse<?> deleteSnacks(@RequestParam @NotNull int snackId) {
         snackService.deleteSnack(snackId);

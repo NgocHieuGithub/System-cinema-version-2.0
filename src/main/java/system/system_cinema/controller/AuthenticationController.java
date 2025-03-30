@@ -1,6 +1,5 @@
 package system.system_cinema.controller;
 
-import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -14,10 +13,7 @@ import system.system_cinema.dto.response.OTP_Response;
 import system.system_cinema.dto.response.TokenResponse;
 import system.system_cinema.service.IAuthenticateService;
 import system.system_cinema.service.IUserService;
-import java.io.UnsupportedEncodingException;
-
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-
 
 @RestController
 @RequestMapping("/auth")
@@ -55,7 +51,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/forgot-password")
-    public ApiResponse<?> forgotPassword(@Valid @RequestBody VerifyRequest request) throws MessagingException, UnsupportedEncodingException {
+    public ApiResponse<?> forgotPassword(@Valid @RequestBody VerifyRequest request)  {
+        authenticateService.createOTP(request);
         return ApiResponse.<OTP_Response>builder()
                 .code(HttpStatus.OK.value())
                 .message("Successful")

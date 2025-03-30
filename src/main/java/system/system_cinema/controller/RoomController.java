@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import system.system_cinema.dto.request.RoomCreateRequest;
 import system.system_cinema.dto.request.ShowtimeRequest;
@@ -23,7 +22,6 @@ import java.util.List;
 public class RoomController {
     IRoomService roomService;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/get/{id}")
     public ApiResponse<RoomResponse> getRoomById(@PathVariable @NotNull int id) {
         return ApiResponse.<RoomResponse>builder()
@@ -33,7 +31,6 @@ public class RoomController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/get-all")
     public ApiResponse<List<RoomResponse>> getAllRoom() {
         return ApiResponse.<List<RoomResponse>>builder()
@@ -43,7 +40,6 @@ public class RoomController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/change")
     public ApiResponse<RoomResponse> changeRoomStatus(@RequestParam @NotNull int id) {
         return ApiResponse.<RoomResponse>builder()
@@ -53,7 +49,6 @@ public class RoomController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create")
     public ApiResponse<?> createRoom(@Valid @RequestBody RoomCreateRequest request) {
         roomService.createRoom(request);
@@ -63,7 +58,6 @@ public class RoomController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/add-showtime/{cinemaHallId}")
     public ApiResponse<RoomResponse> addShowtime(@PathVariable @NotNull int cinemaHallId, @Valid @RequestBody ShowtimeRequest showtimeRequest) {
         return ApiResponse.<RoomResponse>builder()
@@ -73,7 +67,6 @@ public class RoomController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/check-available-room")
     public ApiResponse<List<RoomResponse>> checkAvailableRoom(@RequestParam @NotNull LocalDateTime time) {
         return ApiResponse.<List<RoomResponse>>builder()

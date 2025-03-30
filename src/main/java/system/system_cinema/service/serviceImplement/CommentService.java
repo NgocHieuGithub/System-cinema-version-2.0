@@ -74,7 +74,7 @@ public class CommentService implements ICommentService {
             comment.setContent(request.getContent());
         } else{
             throw new RuntimeException("Not authorized to edit comment");
-        };
+        }
         return commentMapper.toCommentResponse(commentRepository.save(comment));
     }
 

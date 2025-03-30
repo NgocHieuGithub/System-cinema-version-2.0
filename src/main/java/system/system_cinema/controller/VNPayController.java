@@ -7,7 +7,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import system.system_cinema.dto.ApiResponse;
 import system.system_cinema.dto.request.LockSeatsRequest;
@@ -27,7 +26,6 @@ public class VNPayController {
     IVNPayService vnPayService;
     BookingRepository bookingRepository;
 
-    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/vn-pay")
     public ApiResponse<?> pay(HttpServletRequest request, @Valid @RequestBody LockSeatsRequest lockSeatsRequest) {
         return ApiResponse.builder()
@@ -52,4 +50,14 @@ public class VNPayController {
         bookingRepository.save(ticket);
         response.sendRedirect(url_direct);
     }
+
+//    @Autowired
+//    private RedisTemplate<String, String> redisTemplate;
+//
+//    @GetMapping("/status")
+//    public ResponseEntity<?> getBookingStatus(@RequestParam String requestId) {
+//        String status = redisTemplate.opsForValue().get("booking:" + requestId);
+//        return ResponseEntity.ok(Map.of("status", Objects.requireNonNullElse(status, "processing")));
+//    }
+
 }

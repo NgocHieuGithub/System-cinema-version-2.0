@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 public class TicketService implements ITicketService {
     TicketRepository ticketRepository;
     UserRepository userRepository;
-    ShowTimeRepository showtimeRepository;
     TicketMapper ticketMapper;
     BookingRepository bookingRepository;
     MovieRepository movieRepository;

@@ -9,8 +9,6 @@ import system.system_cinema.dto.ApiResponse;
 import system.system_cinema.dto.request.ParamsRequest;
 import system.system_cinema.dto.response.ParamsResponse;
 import system.system_cinema.service.IParamsService;
-import system.system_cinema.service.serviceImplement.ParamsService;
-
 import java.util.List;
 
 @RestController

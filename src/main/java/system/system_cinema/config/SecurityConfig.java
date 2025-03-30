@@ -37,6 +37,7 @@ public class SecurityConfig {
             "/movies/get-all", "/movies/get",
             "/showtimes/get-by-movie",
             "/comments/**",
+            "/payment/**"
     };
     IUserService userService;
     Prefilter preFilter;

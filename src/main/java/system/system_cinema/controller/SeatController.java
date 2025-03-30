@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import system.system_cinema.dto.ApiResponse;
 import system.system_cinema.dto.request.SeatRequest;
@@ -27,11 +26,10 @@ public class SeatController {
         return ApiResponse.<List<SeatResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Successful")
-                .data(seatService.getSeatsByCinemaHall(showtimeId))
+                .data(seatService.getSeatsByRoom(showtimeId))
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/admin/create")
     public ApiResponse<SeatResponse> createSeat(@Valid @RequestBody SeatRequest seatRequest) {
         return ApiResponse.<SeatResponse>builder()

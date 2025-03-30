@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import system.system_cinema.dto.ApiResponse;
 import system.system_cinema.dto.response.*;
@@ -20,7 +19,6 @@ public class TicketController {
 
     ITicketService ticketService;
 
-    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/get-by-user/{userId}")
     public ApiResponse<List<TicketResponse>> getTicketsByUser(@PathVariable @NotNull int userId) {
         return ApiResponse.<List<TicketResponse>>builder()
@@ -30,7 +28,6 @@ public class TicketController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/get-statistic-total-price")
     public ApiResponse<List<StatisticPriceMonthResponse>> monthlyStatistics() {
         return ApiResponse.<List<StatisticPriceMonthResponse>>builder()
@@ -40,7 +37,6 @@ public class TicketController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/get-statistic-total-ticket-sold-by-user")
     public ApiResponse<List<StatisticUserTicket>> monthlyStatisticsByUser() {
         return ApiResponse.<List<StatisticUserTicket>>builder()
@@ -50,7 +46,6 @@ public class TicketController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/get-statistic-revenue-movie")
     public ApiResponse<List<StatisticMovieRevenue>> monthlyStatisticRevenueMovie() {
         return ApiResponse.<List<StatisticMovieRevenue>>builder()
@@ -60,7 +55,6 @@ public class TicketController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/get-status-ticket")
     public ApiResponse<List<StatusTicket>> getStatusTicket() {
         return ApiResponse.<List<StatusTicket>>builder()
